@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitor Despachos | COMBUSES</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<style>
+  body { background: #f1f5f9; }
+  .monitor-wrap { max-width: 1200px; margin: 0 auto; padding: 16px; }
+  .monitor-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .monitor-title { font-size: 24px; font-weight: 800; color: #0f172a; }
+  .monitor-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge { border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 700; }
+  .ok { background: #dcfce7; color: #166534; }
+  .warn { background: #fef3c7; color: #92400e; }
+  .err { background: #fee2e2; color: #991b1b; }
+  .monitor-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+  .monitor-table-wrap { overflow-x: auto; }
+  .monitor-table { width: 100%; min-width: 900px; border-collapse: collapse; }
+  .monitor-table th, .monitor-table td { border-bottom: 1px solid #e2e8f0; padding: 10px 12px; text-align: left; font-size: 14px; }
+  .monitor-table th { background: #e0e7ff; color: #1e3a8a; font-weight: 700; }
+  .monitor-empty { padding: 16px; color: #64748b; }
+  #dispatchNotifyModal {
+    background: rgba(15, 23, 42, 0.68);
+  }
+  #dispatchNotifyModal .modal-card {
+    max-width: 760px;
+    border-radius: 18px;
+    border: 3px solid #dc2626;
+    box-shadow: 0 0 0 6px rgba(220, 38, 38, 0.22), 0 20px 60px rgba(0, 0, 0, 0.45);
+    animation: notifyPulse 0.9s ease-in-out infinite;
+    background: linear-gradient(180deg, #fff1f2 0%, #ffffff 100%);
+  }
+  #dispatchNotifyModal h3 {
+    font-size: 40px;
+    line-height: 1.1;
+    color: #991b1b;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  #dispatchNotifyText {
+    font-size: 30px;
+    line-height: 1.32;
+    font-weight: 800;
+    color: #111827;
+    white-space: pre-line;
+  }
+  #dispatchNotifyClose {
+    min-height: 58px;
+    min-width: 220px;
+    font-size: 22px;
+    font-weight: 800;
+  }
+  @keyframes notifyPulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.18), 0 16px 42px rgba(0, 0, 0, 0.35);
+      border-color: #dc2626;
+    }
+    50% {
+      transform: scale(1.01);
+      box-shadow: 0 0 0 10px rgba(234, 179, 8, 0.28), 0 22px 58px rgba(0, 0, 0, 0.45);
+      border-color: #eab308;
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.18), 0 16px 42px rgba(0, 0, 0, 0.35);
+      border-color: #dc2626;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="monitor-wrap">
+    <div class="monitor-top">
+      <div class="monitor-title">Monitor en vivo de despachos</div>
+      <div class="monitor-meta">
+        <span id="realtimeStatus" class="badge warn">Conectando...</span>
+        <span id="rowsCount" class="badge ok">0 registros</span>
+        <button id="refreshBtn" class="btn-secondary" type="button">Refrescar</button>
+        <button id="logoutBtn" class="btn-logout" type="button">Salir</button>
+      </div>
+    </div>
+
+    <section class="monitor-card">
+      <div class="monitor-table-wrap">
+        <table class="monitor-table">
+          <thead>
+            <tr>
+              <th>Fecha despacho</th>
+              <th>Hora despacho (24h)</th>
+              <th>Vehiculo</th>
+              <th>Itinerario</th>
+              <th>Gestor</th>
+            </tr>
+          </thead>
+          <tbody id="monitorBody"></tbody>
+        </table>
+      </div>
+      <div id="monitorEmpty" class="monitor-empty">Cargando despachos...</div>
+      <div class="dispatch-pagination" style="padding:10px 12px;">
+        <button id="monitorPrevBtn" type="button" class="btn-secondary">Anterior</button>
+        <span id="monitorPageInfo">Pagina 1 de 1</span>
+        <button id="monitorNextBtn" type="button" class="btn-secondary">Siguiente</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="dispatchNotifyModal" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+      <h3>Alerta de despacho</h3>
+      <p id="dispatchNotifyText">-</p>
+      <div class="modal-actions">
+        <button id="dispatchNotifyClose" type="button" class="btn-secondary">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="monitor.js"></script>
+</body>
+</html>

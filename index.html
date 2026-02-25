@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COMBUSES | Acceso</title>
+
+<link rel="stylesheet" href="styles.css">
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<div class="login-shell">
+  <div class="login-card">
+    <div class="brand">
+      <h1>COMBUSES</h1>
+      <p>Plataforma interna de despachos</p>
+    </div>
+
+    <form id="loginForm" class="auth-form active">
+      <h2>Iniciar sesión</h2>
+      <input type="email" id="loginEmail" placeholder="Correo corporativo" required autocomplete="username">
+      <input type="password" id="loginPassword" placeholder="Contrase�a" required autocomplete="current-password">
+      <button type="submit" class="btn-primary">Entrar al sistema</button>
+      <div id="loginMessage" class="message"></div>
+    </form>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
