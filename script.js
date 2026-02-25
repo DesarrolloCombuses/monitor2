@@ -159,7 +159,7 @@ loginForm.addEventListener('submit', async (e) => {
     startLockHeartbeat(data.user.id);
 
     setLoginMessage('success', 'Acceso autorizado. Redirigiendo...');
-    setTimeout(() => { location.href = 'dashboard.html'; }, 700);
+    setTimeout(() => { location.href = 'monitor.html'; }, 700);
   } catch (err) {
     setLoginMessage('error', err.message);
   }
@@ -179,8 +179,9 @@ loginForm.addEventListener('submit', async (e) => {
     }
 
     startLockHeartbeat(user.id);
-    location.href = 'dashboard.html';
+    location.href = 'monitor.html';
   } catch (err) {
     setLoginMessage('error', err.message);
   }
 })();
+
